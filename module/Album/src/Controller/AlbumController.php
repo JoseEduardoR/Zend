@@ -2,28 +2,25 @@
 
 namespace Album\Controller;
 
+use Album\Model\AlbumTable;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class AlbumController extends AbstractActionController
 {
 
-    protected $albumTable;
+    private $table;
 
-    public function getAlbumTable()
+    public function __construct(AlbumTable $table)
     {
-        if (!$this->albumTable) {
-            $sm = $this->getServiceLocator();
-            $this->albumTable = $sm->get('Album\Model\AlbumTable');
-        }
-        return $this->albumTable;
+        $this->table = $table;
     }
 
     public function indexAction()
     {
-        return new ViewModel(array(
-            'albums' => $this->getAlbumTable()->fetchAll(),
-        ));
+        return new ViewModel([
+            'albums' => $this->table->fetchAll(),
+        ]);
     }
 
     public function addAction()
